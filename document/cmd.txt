@@ -14,3 +14,25 @@ curl -i -XGET "http://localhost:8080/api/customers?page=2&size=1"
 curl -i -XGET "http://localhost:8080/api/customers"
 
 
+hajiboot-furu01
+
+■jar再作成
+mvnw clean package -DskipTest=true
+
+■クラウドファンドリー
+cf login
+api.run.pivotal.io
+tetsufuru1968@yahoo.co.jp
+
+cf push hajiboot-furu01 -p target/hajiboot-0.0.1-SNAPSHOT.jar -m 1g -b java_buildpack
+cf push hajiboot-furu02 -p target/hajiboot-0.0.1-SNAPSHOT.jar -m 1g -b java_buildpack
+
+cf scale hajiboot-furu01 -i 1
+cf app hajiboot-furu01
+
+■ルーティング
+cf map-route hajiboot-furu02 cfapps.io -n hajiboot-furu01
+cf unmap-route hajiboot-furu01 cfapps.io -n hajiboot-furu01
+cf unmap-route hajiboot-furu02 cfapps.io -n hajiboot-furu02
+
+cf delete hajiboot-furu01
