@@ -11,7 +11,8 @@ public class HajibootApplication {
 
   @GetMapping("/")
   public String home() {
-    return "HajiBootApp" + " (" + System.getenv("CF_INSTANCE_INDEX") + ") Ver2";
+    return "Hello SpringBoot";
+    //    return "HajiBootApp" + " (" + System.getenv("CF_INSTANCE_INDEX") + ") Ver2";
   }
 
   @GetMapping("kill")

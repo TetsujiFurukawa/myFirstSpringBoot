@@ -20,9 +20,16 @@ hajiboot-furu01
 mvnw clean package -DskipTest=true
 
 ■クラウドファンドリー
+https://pivotal.io/jp/platform
+tetsufuru1968@yahoo.co.jp
+!Furu0001
+
 cf login
 api.run.pivotal.io
 tetsufuru1968@yahoo.co.jp
+
+■リファレンス
+http://cli.cloudfoundry.org/ja-JP/cf/
 
 cf push hajiboot-furu01 -p target/hajiboot-0.0.1-SNAPSHOT.jar -m 1g -b java_buildpack
 cf push hajiboot-furu02 -p target/hajiboot-0.0.1-SNAPSHOT.jar -m 1g -b java_buildpack
@@ -36,3 +43,21 @@ cf unmap-route hajiboot-furu01 cfapps.io -n hajiboot-furu01
 cf unmap-route hajiboot-furu02 cfapps.io -n hajiboot-furu02
 
 cf delete hajiboot-furu01
+
+cf push hajiboot-furu01 -p target/hajiboot-thymeleaf-2nd-0.0.1-SNAPSHOT.jar -m 1g -b java_buildpack
+
+curl https://hajiboot-furu01.cfapps.io/api/customers  -i -XGET
+
+■MySQL
+cf create-service cleardb spark customer-db
+cf bind-service hajiboot-furu01 customer-db
+cf start hajiboot-furu01
+
+curl http://hajiboot-furu01.cfapps.io/api/customers  -i -XGET
+curl https://hajiboot-furu01.cfapps.io/api/customers -i -XPOST -H "Content-Type:application/json" -d"{\"firstName\":\"Tamako\",\"lastName\":\"Nobi\"}"
+
+cf delete-service customer-db [-f]
+
+cf push hajiboot-furu01 -p target/hajiboot-rest-SAMPLE-0.0.1-SNAPSHOT.jar -m 1g -b java_buildpack --no-start
+
+curl http://hajiboot-furu01.cfapps.io/health -i -XGET
